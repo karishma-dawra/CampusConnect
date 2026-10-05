@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CampusConnect Dashboard</title>
+        <link rel="stylesheet" href="dashboard.css">x
+    </head>
+    <body>
+        <header>
+            <div class="brand">
+            <img src="chitkaralogo.png" alt="Chitkara university logo" class="logo">
+            
+        <h1>Campus<span>Connect</span></h1>
+        </div>
+
+        <nav>
+            <a href="" class="active">Dashboard</a>
+            <a href="profile.html" class="profile-btn">Profile</a>
+            <a href="#" class="logout-btn">Logout</a>
+        </nav>
+        </header>
+        <main>
+         <div class="dashboard-header">
+        <h2>Campus Issues</h2>
+        <button onclick="window.location.href='create_issue.html'">+ New Issue</button>
+        </div>
+        <div class="issue-card">
+            <h3>Fan not working</h3>
+            <p><span class="category-badge">Classroom</span> - Room 309</p>
+            <p>Status: <strong class="status-open">Open</strong></p>
+        </div>
+
+        <div class="issue-card">
+            <h3>Wi-Fi not working</h3>
+            <p><span class="category-badge">Campus</span> - Block A</p>
+            <p>Status: <strong class="status-progress">In Progress</strong></p>
+        </div>
+        <div class="issue-card">
+            <h3>Water cooler not working</h3>
+            <p><span class="category-badge">Campus</span>-Block B</p>
+            <p>Status: <strong class="status-resolved">Resolved</strong></p>
+        </div>
+        </main>
+    </body>
+</html>

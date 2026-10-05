@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Create Issue - CampusConnect</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="brand">
+            <img src="chitkaralogo.png" alt="Chitkara university logo" class="logo">
+            <h1>Campus<span>Connect</span></h1>
+        </div>
+
+        <nav>
+            <a href="dashboard.html" class="active">Dashboard</a>
+            <a href="#">Profile</a>
+            <a href="#">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+
+    <h2>Create New Issue</h2>
+
+    <div class="issue-form">
+
+        <label>Issue Title</label>
+        <input type="text" placeholder="Enter issue title">
+
+        <label>Category</label>
+        <select>
+            <option>Select Category</option>
+            <option>Classroom</option>
+            <option>Campus</option>
+            <option>Lost & Found</option>
+            <option>General</option>
+        </select>
+
+        <label>Description</label>
+        <textarea placeholder="Describe the issue"></textarea>
+
+        <button type="button" onclick="submitIssue()">Submit Issue</button>
+
+    </div>
+
+</main>
+<script>
+    function submitIssue(){
+        alert("Issue submitted successfully!");
+        window.location.href="dashboard.html";
+    }
+</script>
+</body>
+
+</html>
