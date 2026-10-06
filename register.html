@@ -6,6 +6,7 @@
     <title>Register</title>
     <link rel="icon" type="image/png" href="https://drive.google.com/thumbnail?id=1FnXdG7aGmNNLgkQSF7leajJrgMWwGhn8&sz=w128">
     <link rel="stylesheet" href="style_adv.css">
+    <script src="register.js" defer></script>
 </head>
 <body>
     <div class="background">
@@ -32,12 +33,13 @@
             <form>
 
                 <div class="input-group">
-                    <label for="roll_no">Username</label>
-                    <input type="text" id="roll_no"inputmode="numeric" pattern="\d{10}" maxlength="10"  placeholder="Enter Roll Number" required>
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username"  pattern="[0-9]{10}" maxlength="10"  placeholder="Enter Roll Number" required>
                 </div>
+
                 <div class="input-group">
                     <label for="email">Official Email Id</label>
-                    <input type="email" id="email" placeholder="Enter Official Id" required>
+                    <input type="email" name="email" id="email" pattern="[A-Za-z]+[0-9]{4}\.[A-Za-z]+[0-9]{2}@chitkara\.edu\.in" placeholder="Enter Official Id" required>
                 </div>
 
                 <div class="input-group">
@@ -45,12 +47,12 @@
                         <label for="password">Password</label>
                     </div>
 
-                    <input type="password" id="password" placeholder="Enter your password" required>
-                    <input type="password" id="confirm_password" placeholder="Confirm password" required>
+                    <input type="password" name="password" id="password"  minlength="8" placeholder="Enter your password" required>
+                    <input type="password" name="confirmpassword" id="confirmpassword"  placeholder="Confirm password" required>
                 </div>
 
 
-                <button type="submit" onclick="window.location.href='login.html'">
+                <button id="submit" type="submit">
                     Sign Up
                     <span>→</span>
                 </button>
@@ -62,9 +64,6 @@
             </p>
 
         </div>
-
-        
-
     </main>
 </body>
 </html>
