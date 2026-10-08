@@ -66,10 +66,32 @@
     </main>
 
     <script>
-        function submitIssue() {
-            alert("Issue submitted successfully!");
-            window.location.href = "dashboard.html";
-        }
+        async function submitIssue() {
+    const title = document.getElementById("issueTitle").value;
+    const category = document.getElementById("issueCategory").value;
+    const location = document.getElementById("issueLocation").value;
+    const description = document.getElementById("issueDescription").value;
+
+    const response = await fetch("http://127.0.0.1:8000/issues", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title: title,
+            category: category,
+            location: location,
+            description: description
+        })
+    });
+
+    if (response.ok) {
+        alert("Issue submitted successfully!");
+        window.location.href = "dashboard.html";
+    } else {
+        alert("Failed to submit issue.");
+    }
+}
     </script>
 
 </body>
