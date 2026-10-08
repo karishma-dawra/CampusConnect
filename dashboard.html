@@ -1,44 +1,127 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>CampusConnect Dashboard</title>
-        <link rel="stylesheet" href="dashboard.css">x
-    </head>
-    <body>
-        <header>
-            <div class="brand">
-            <img src="chitkaralogo.png" alt="Chitkara university logo" class="logo">
-            
-        <h1>Campus<span>Connect</span></h1>
+
+<head>
+    <title>CampusConnect Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+
+    <header>
+
+        <div class="brand">
+            <img src="chitkaralogo.png"
+                 alt="Chitkara university logo"
+                 class="logo">
+
+            <h1>Campus<span>Connect</span></h1>
         </div>
 
         <nav>
-            <a href="" class="active">Dashboard</a>
+            <a href="dashboard.html" class="active">Dashboard</a>
             <a href="profile.html" class="profile-btn">Profile</a>
-            <a href="#" class="logout-btn">Logout</a>
+            <a href="login.html" class="logout-btn">Logout</a>
         </nav>
-        </header>
-        <main>
-         <div class="dashboard-header">
-        <h2>Campus Issues</h2>
-        <button onclick="window.location.href='create_issue.html'">+ New Issue</button>
-        </div>
-        <div class="issue-card">
-            <h3>Fan not working</h3>
-            <p><span class="category-badge">Classroom</span> - Room 309</p>
-            <p>Status: <strong class="status-open">Open</strong></p>
+
+    </header>
+
+    <main>
+
+        <div class="dashboard-header">
+
+            <h2>Campus Issues</h2>
+
+            <button onclick="window.location.href='create_issue.html'">
+                + New Issue
+            </button>
+
         </div>
 
-        <div class="issue-card">
-            <h3>Wi-Fi not working</h3>
-            <p><span class="category-badge">Campus</span> - Block A</p>
-            <p>Status: <strong class="status-progress">In Progress</strong></p>
+        <!-- Issues will be loaded from backend -->
+        <div id="issues-container">
+
+            <p>Loading issues...</p>
+
         </div>
-        <div class="issue-card">
-            <h3>Water cooler not working</h3>
-            <p><span class="category-badge">Campus</span>-Block B</p>
-            <p>Status: <strong class="status-resolved">Resolved</strong></p>
-        </div>
-        </main>
-    </body>
+
+    </main>
+
+
+    <script>
+
+        async function loadIssues() {
+
+            const container = document.getElementById("issues-container");
+
+            try {
+
+                const response = await fetch("http://127.0.0.1:8000/issues");
+
+                if (!response.ok) {
+                    throw new Error("Failed to load issues");
+                }
+
+                const issues = await response.json();
+
+                container.innerHTML = "";
+
+                if (issues.length === 0) {
+
+                    container.innerHTML =
+                        "<p>No issues found.</p>";
+
+                    return;
+                }
+
+                issues.forEach(function(issue) {
+
+                    const card = document.createElement("div");
+
+                    card.className = "issue-card";
+
+                    card.onclick = function() {
+
+                        window.location.href =
+                            "issue_details.html?id=" + issue.id;
+
+                    };
+
+                    card.innerHTML = `
+                        <h3>${issue.title}</h3>
+
+                        <p>
+                            <span class="category-badge">
+                                ${issue.category}
+                            </span>
+                            - ${issue.location}
+                        </p>
+
+                        <p>
+                            Status:
+                            <strong>${issue.status}</strong>
+                        </p>
+                    `;
+
+                    container.appendChild(card);
+
+                });
+
+            } catch (error) {
+
+                container.innerHTML =
+                    "<p>Unable to load issues. Please try again later.</p>";
+
+                console.log(error);
+
+            }
+
+        }
+
+        loadIssues();
+
+    </script>
+
+</body>
+
 </html>
