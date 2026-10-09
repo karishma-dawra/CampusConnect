@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Issue Details - CampusConnect</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="brand">
+            <img src="chitkaralogo.png"
+                 alt="Chitkara University logo"
+                 class="logo">
+
+            <h1>Campus<span>Connect</span></h1>
+        </div>
+
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="profile.html">Profile</a>
+            <a href="login.html" class="logout-btn">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <h2>Issue Details</h2>
+
+        <div class="issue-details-card" id="issue-details">
+
+            <h3 id="issue-title">Issue Title</h3>
+
+            <p>
+                <strong>Category:</strong>
+                <span id="issue-category">Category</span>
+            </p>
+
+            <p>
+                <strong>Location:</strong>
+                <span id="issue-location">Location</span>
+            </p>
+
+            <p>
+                <strong>Description:</strong>
+                <span id="issue-description">Description</span>
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+<select id="issue-status">
+    <option value="Open">Open</option>
+    <option value="In Progress">In Progress</option>
+    <option value="Resolved">Resolved</option>
+</select>
+<button onclick="updateStatus()">Update Status</button>
+            </p>
+
+        </div>
+
+    </main>
+
+    <script>
+    async function loadIssue() {
+        const params = new URLSearchParams(window.location.search);
+        const issueId = params.get("id");
+
+        const response = await fetch(`http://127.0.0.1:8000/issues/${issueId}`);
+
+        if (!response.ok) {
+            alert("Issue not found.");
+            return;
+        }
+
+        const issue = await response.json();
+
+        document.getElementById("issue-title").textContent = issue.title;
+        document.getElementById("issue-category").textContent = issue.category;
+        document.getElementById("issue-location").textContent = issue.location;
+        document.getElementById("issue-description").textContent = issue.description;
+        document.getElementById("issue-status").value = issue.status;
+    }
+
+    loadIssue();
+    async function updateStatus() {
+    const params = new URLSearchParams(window.location.search);
+    const issueId = params.get("id");
+    const status = document.getElementById("issue-status").value;
+
+    const response = await fetch(
+        `http://127.0.0.1:8000/issues/${issueId}/status`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                status: status
+            })
+        }
+    );
+
+    if (response.ok) {
+        alert("Status updated successfully!");
+    } else {
+        const error = await response.json();
+        alert("Failed: " + JSON.stringify(error));
+    }
+}
+
+    if (response.ok) {
+        alert("Status updated successfully!");
+    } else {
+        alert("Failed to update status.");
+    }
+
+</script>
+
+</body>
+
+</html>

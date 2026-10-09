@@ -2,11 +2,16 @@
 __pycache__/
 *.pyc
 
-# Database (each teammate keeps their own local DB)
-*.db
-*.sqlite3
+# System files
+.DS_Store
 
-# Environment files
+# Environment files & dependencies
 .env
 venv/
 .venv/
+backend/venv/
+
+# Database files
+*.db
+*.sqlite3
+backend/campusconnect.db

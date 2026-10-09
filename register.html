@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="icon" type="image/png" href="https://drive.google.com/thumbnail?id=1FnXdG7aGmNNLgkQSF7leajJrgMWwGhn8&sz=w128">
+    <link rel="stylesheet" href="style_adv.css">
+    <script src="register.js" defer></script>
+</head>
+<body>
+    <div class="background">
+        <div class="circle circle1"></div>
+        <div class="circle circle2"></div>
+    </div>
+
+
+    <main class="login-container">
+
+        <div class="brand">
+            <div class="logo"></div>
+            <h1>Campus<span>Connect</span></h1>
+            <p>Connect. Collaborate. Grow.</p>
+        </div>
+
+        <div class="login-card">
+
+            <div class="card-header">
+                <h2>New User Registration</h2>
+                <p>Sign Up to register your account</p>
+            </div>
+
+            <form>
+
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username"  pattern="[0-9]{10}" maxlength="10"  placeholder="Enter Roll Number" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="email">Official Email Id</label>
+                    <input type="email" name="email" id="email" pattern="[A-Za-z]+[0-9]{4}\.[A-Za-z]+[0-9]{2}@chitkara\.edu\.in" placeholder="Enter Official Id" required>
+                </div>
+
+                <div class="input-group">
+                    <div class="password-label">
+                        <label for="password">Password</label>
+                    </div>
+
+                    <input type="password" name="password" id="password"  minlength="8" placeholder="Enter your password" required>
+                    <input type="password" name="confirmpassword" id="confirmpassword"  placeholder="Confirm password" required>
+                </div>
+
+
+                <button id="submit" type="submit">
+                    Sign Up
+                    <span>→</span>
+                </button>
+
+            </form>
+
+            <p class="register">
+               Already have an account?  <a href="login.html">Sign In</a>
+            </p>
+
+        </div>
+    </main>
+</body>
+</html>

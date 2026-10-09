@@ -15,44 +15,85 @@
         </div>
 
         <nav>
-            <a href="dashboard.html" class="active">Dashboard</a>
-            <a href="#">Profile</a>
-            <a href="#">Logout</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="profile.html">Profile</a>
+            <a href="login.html" class="logout-btn">Logout</a>
         </nav>
     </header>
 
     <main>
 
-    <h2>Create New Issue</h2>
+        <h2>Create New Issue</h2>
 
-    <div class="issue-form">
+        <div class="issue-form">
 
-        <label>Issue Title</label>
-        <input type="text" placeholder="Enter issue title">
+            <label for="issueTitle">Issue Title</label>
+            <input
+                type="text"
+                id="issueTitle"
+                name="title"
+                placeholder="Enter issue title"
+            >
 
-        <label>Category</label>
-        <select>
-            <option>Select Category</option>
-            <option>Classroom</option>
-            <option>Campus</option>
-            <option>Lost & Found</option>
-            <option>General</option>
-        </select>
+            <label for="issueCategory">Category</label>
+            <select id="issueCategory" name="category">
+                <option value="">Select Category</option>
+                <option value="Classroom">Classroom</option>
+                <option value="Campus">Campus</option>
+                <option value="Lost & Found">Lost & Found</option>
+                <option value="General">General</option>
+            </select>
 
-        <label>Description</label>
-        <textarea placeholder="Describe the issue"></textarea>
+            <label for="issueLocation">Location / Room</label>
+            <input
+                type="text"
+                id="issueLocation"
+                name="location"
+                placeholder="Enter location or room number"
+            >
 
-        <button type="button" onclick="submitIssue()">Submit Issue</button>
+            <label for="issueDescription">Description</label>
+            <textarea
+                id="issueDescription"
+                name="description"
+                placeholder="Describe the issue"
+            ></textarea>
 
-    </div>
+            <button type="button" onclick="submitIssue()">Submit Issue</button>
 
-</main>
-<script>
-    function submitIssue(){
+        </div>
+
+    </main>
+
+    <script>
+        async function submitIssue() {
+    const title = document.getElementById("issueTitle").value;
+    const category = document.getElementById("issueCategory").value;
+    const location = document.getElementById("issueLocation").value;
+    const description = document.getElementById("issueDescription").value;
+
+    const response = await fetch("http://127.0.0.1:8000/issues", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title: title,
+            category: category,
+            location: location,
+            description: description
+        })
+    });
+
+    if (response.ok) {
         alert("Issue submitted successfully!");
-        window.location.href="dashboard.html";
+        window.location.href = "dashboard.html";
+    } else {
+        alert("Failed to submit issue.");
     }
-</script>
+}
+    </script>
+
 </body>
 
 </html>
