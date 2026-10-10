@@ -2,32 +2,11 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - CampusConnect</title>
-    <link rel="icon" type="image/png" href="https://drive.google.com/thumbnail?id=1FnXdG7aGmNNLgkQSF7leajJrgMWwGhn8&sz=w128">
     <link rel="stylesheet" href="dashboard.css">
-    <script src="loader.js" defer></script>
 </head>
 
 <body>
-
-    
-<!-- loader start-->
-
-
-<div id="loader">
-
-   
-    <div class="spinner" id="spinner"></div>
-    <img
-        id="loader-logo"
-        src="https://drive.google.com/thumbnail?id=1P5dhvb-RHJ_f-3v45eattSBf56D5e9yZ&sz=w1000"
-        alt="Website Logo">
-
-</div>
-
-<!-- loader end -->
 
     <header>
         <div class="brand">
@@ -53,7 +32,7 @@
             <h3>Student Profile</h3>
 
             <p>
-                <strong>Username:</strong>
+                <strong>Name:</strong>
                 <span id="profile-name">Loading...</span>
             </p>
 
@@ -71,9 +50,16 @@
 
     </main>
 
-    <script>
-        // User details will be loaded from the backend API.
-    </script>
+    
+<script>
+    const name = localStorage.getItem("user_name");
+    const email = localStorage.getItem("user_email");
+
+    document.getElementById("profile-name").textContent = name || "Not available";
+    document.getElementById("profile-email").textContent = email || "Not available";
+    document.getElementById("profile-role").textContent = "Student";
+</script>
+    
 
 </body>
 
