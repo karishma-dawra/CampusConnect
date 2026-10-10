@@ -1,56 +1,42 @@
-const email = document.getElementById("email");
+const form = document.querySelector("form");
 
-email.addEventListener("invalid", function () {
-    if (email.validity.valueMissing) {
-        email.setCustomValidity("Please enter your offical email.");
-    } 
-    else if (email.validity.typeMismatch || email.validity.patternMismatch) {
-        email.setCustomValidity(
-            "Please enter a valid offical email like name1234.branch@chitkara.edu.in"
-        );
+form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const inputs = form.querySelectorAll("input");
+    const name = inputs[0].value.trim();
+    const email = inputs[1].value.trim();
+    const password = inputs[2].value;
+    const confirmPassword = inputs[3].value;
+
+    if (password !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                password: password
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert(data.message);
+            window.location.href = "login.html";
+        } else {
+            alert(data.detail || data.message || "Registration failed");
+        }
+    } catch (error) {
+        alert("Could not connect to the backend. Make sure it is running.");
+        console.error(error);
     }
 });
-
-// _______________________________________________________________________
-
-
-const username = document.getElementById("username");
-
-username.addEventListener("invalid", function () {
-    if (username.validity.valueMissing) {
-        username.setCustomValidity("Please enter your username.");
-    }
-    else if (username.validity.patternMismatch) {
-        username.setCustomValidity("Enter your 10-digit roll number.");
-    }
-});
-
-username.addEventListener("input", function () {
-    username.setCustomValidity("");
-});
-
-
-// _________________________________________________________________________
-
-const password = document.getElementById("password");
-const confirmpassword = document.getElementById("confirmpassword");
-
-password.addEventListener("input", function () {
-    if (password.value.length < 8) {
-        password.setCustomValidity("Password must contain at least 8 characters.");
-    } else {
-        password.setCustomValidity("");
-    }
-
-    checkPasswordMatch();
-});
-
-confirmpassword.addEventListener("input", checkPasswordMatch);
-
-function checkPasswordMatch() {
-    if (confirmpassword.value !== password.value) {
-        confirmpassword.setCustomValidity("Passwords do not match.");
-    } else {
-        confirmpassword.setCustomValidity("");
-    }
-}

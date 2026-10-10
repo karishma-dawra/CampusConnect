@@ -1,17 +1,15 @@
-# Python cache
+# Python
 __pycache__/
-*.pyc
-
-# System files
-.DS_Store
-
-# Environment files & dependencies
-.env
+*.py[cod]
 venv/
-.venv/
 backend/venv/
 
-# Database files
+# Local databases
 *.db
-*.sqlite3
-backend/campusconnect.db
+
+# Environment variables
+.env
+
+# macOS
+.DS_Store
+tempCodeRunnerFile.py
