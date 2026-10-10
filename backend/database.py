@@ -9,9 +9,11 @@ def get_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-def create_table():
+def create_tables():
     conn = get_connection()
     cursor = conn.cursor()
+    
+    # Create Issues Table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS issues (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -22,12 +24,23 @@ def create_table():
             status TEXT DEFAULT 'Open'
         )
     """)
+    
+    # Create Users Table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            password TEXT NOT NULL
+        )
+    """)
+    
     conn.commit()
     conn.close()
 
 def init_db():
-    create_table()
+    create_tables()
 
 if __name__ == "__main__":
     init_db()
-    print("Database created successfully")
+    print("Database tables created successfully!")

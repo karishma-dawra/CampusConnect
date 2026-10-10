@@ -2,8 +2,8 @@
 import sqlite3
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from database import get_connection, create_table
-
+from database import get_connection, create_tables
+from passlib.context import CryptContext
 
 app = FastAPI()
 
@@ -14,25 +14,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-create_table()
+create_tables()
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def create_users_table():
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT NOT NULL UNIQUE,
-            password TEXT NOT NULL
-        )
-    """)
-    conn.commit()
-    conn.close()
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
 
-
-create_users_table()
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
 
 
 @app.get("/")
@@ -48,6 +38,8 @@ def register(data: dict):
 
     if not name or not email or not password:
         raise HTTPException(status_code=400, detail="Name, email, and password are required")
+
+    hashed_pwd = hash_password(password)
 
     conn = get_connection()
     cursor = conn.cursor()
