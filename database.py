@@ -1,23 +1,33 @@
+
 import sqlite3
+import os
 
-def init_db():
-    #Connects to 'campusconnect.db'
-    conn=sqlite3.connect("campusconnect.db") #created connector object
-    cursor=conn.cursor() #created a cursor
+DATABASE_NAME = os.path.join(os.path.dirname(os.path.abspath(__file__)), "campusconnect.db")
 
-    cursor.execute(
-        """
-        CREATE TABLE if not exists users(
-        ID integer primary key,
-        NAME text not null,
-        Email text unique not null,
-        Password text not null
+def get_connection():
+    conn = sqlite3.connect(DATABASE_NAME)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+def create_table():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS issues (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            category TEXT NOT NULL,
+            location TEXT NOT NULL,
+            description TEXT NOT NULL,
+            status TEXT DEFAULT 'Open'
         )
-        """
-    )
+    """)
     conn.commit()
     conn.close()
-    print("database created successfully")
+
+def init_db():
+    create_table()
 
 if __name__ == "__main__":
     init_db()
+    print("Database created successfully")

@@ -1,7 +1,8 @@
 import sqlite3
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from database import get_connection, create_table
+
 
 app = FastAPI()
 
@@ -10,65 +11,196 @@ app.add_middleware(
     allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
+    
+
 )
 
-def get_db():
-    conn = sqlite3.connect("campusconnect.db")
-    conn.row_factory = (
-        sqlite3.Row
-    ) 
-    return conn
+create_table()
 
-# Request format for Register
-class RegisterData(BaseModel):
-    name: str
-    email: str
-    password: str
 
-# Request format for Login
-class LoginData(BaseModel):
-    email: str
-    password: str
-
-# ---------------- 1. REGISTER ROUTE ----------------
-@app.post("/register")
-def register(data: RegisterData):
-    conn = sqlite3.connect("campusconnect.db")
+def create_users_table():
+    conn = get_connection()
     cursor = conn.cursor()
-
-    # Insert user into database
-    cursor.execute(
-        "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
-        (data.name, data.email, data.password),
-    )
-
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            password TEXT NOT NULL
+        )
+    """)
     conn.commit()
     conn.close()
 
-    return {"message": "User registered successfully!"}
 
-# ---------------- 2. LOGIN ROUTE ----------------
-@app.post("/login")
-def login(data: LoginData):
-    conn = sqlite3.connect("campusconnect.db")
+create_users_table()
+
+
+@app.get("/")
+def home():
+    return {"message": "CampusConnect backend is running"}
+
+
+@app.post("/register")
+def register(data: dict):
+    name = data.get("name")
+    email = data.get("email")
+    password = data.get("password")
+
+    if not name or not email or not password:
+        raise HTTPException(
+            status_code=400,
+            detail="Name, email, and password are required"
+        )
+
+    conn = get_connection()
     cursor = conn.cursor()
 
-    # Search for matching user
-    cursor.execute(
-        "SELECT id, name, email FROM users WHERE email = ? AND password = ?",
-        (data.email, data.password),
-    )
-    user = cursor.fetchone()  # Returns a tuple like (1, "Alice", "alice@test.com") or None
+    try:
+        cursor.execute(
+            "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+            (name, email, password)
+        )
+        conn.commit()
+        return {"message": "User registered successfully!"}
+    except sqlite3.IntegrityError:
+        raise HTTPException(
+            status_code=400,
+            detail="Email already registered"
+        )
+    finally:
+        conn.close()
 
-    conn.close()
 
-    # Check if user was found
-    if user:
+@app.post("/login")
+def login(data: dict):
+    email = data.get("email")
+    password = data.get("password")
+
+    if not email or not password:
+        raise HTTPException(
+            status_code=400,
+            detail="Email and password are required"
+        )
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute(
+            "SELECT id, name, email FROM users WHERE email = ? AND password = ?",
+            (email, password)
+        )
+        user = cursor.fetchone()
+
+        if not user:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid email or password"
+            )
+
         return {
             "message": "Login successful!",
             "user_id": user[0],
             "name": user[1],
-            "email": user[2],
+            "email": user[2]
         }
-    else:
-        return {"message": "Invalid email or password"}
+    finally:
+        conn.close()
+@app.get("/issues")
+def get_issues():
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT * FROM issues ORDER BY id DESC")
+        rows = cursor.fetchall()
+        return [dict(row) for row in rows]
+    finally:
+        conn.close()
+
+@app.get("/issues/{issue_id}")
+def get_issue(issue_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT * FROM issues WHERE id = ?", (issue_id,))
+        row = cursor.fetchone()
+
+        if row is None:
+            raise HTTPException(status_code=404, detail="Issue not found")
+
+        return dict(row)
+    finally:
+        conn.close()
+
+
+
+@app.post("/issues")
+def create_issue(issue: dict):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute(
+            """
+            INSERT INTO issues (title, category, location, description)
+            VALUES (?, ?, ?, ?)
+            """,
+            (
+                issue["title"],
+                issue["category"],
+                issue["location"],
+                issue["description"]
+             )
+        )
+        
+        conn.commit()
+        issue_id = cursor.lastrowid
+
+        return {
+            "message": "Issue created successfully",
+            "issue_id": issue_id
+        }
+    finally:
+        conn.close()
+    
+@app.put("/issues/{issue_id}/status")
+def update_issue_status(issue_id: int, data: dict):
+    status = data.get("status")
+
+    if status not in ["Open", "In Progress", "Resolved"]:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid status"
+        )
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute(
+            "SELECT id FROM issues WHERE id = ?",
+            (issue_id,)
+        )
+
+        if cursor.fetchone() is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Issue not found"
+            )
+
+        cursor.execute(
+            "UPDATE issues SET status = ? WHERE id = ?",
+            (status, issue_id)
+        )
+
+        conn.commit()
+
+        return {
+            "message": "Status updated successfully",
+            "issue_id": issue_id,
+            "status": status
+        }
+    finally:
+        conn.close()
+    

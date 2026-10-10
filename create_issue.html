@@ -66,32 +66,46 @@
     </main>
 
     <script>
-        async function submitIssue() {
-    const title = document.getElementById("issueTitle").value;
+        
+async function submitIssue() {
+    const title = document.getElementById("issueTitle").value.trim();
     const category = document.getElementById("issueCategory").value;
-    const location = document.getElementById("issueLocation").value;
-    const description = document.getElementById("issueDescription").value;
+    const location = document.getElementById("issueLocation").value.trim();
+    const description = document.getElementById("issueDescription").value.trim();
 
-    const response = await fetch("http://127.0.0.1:8000/issues", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            title: title,
-            category: category,
-            location: location,
-            description: description
-        })
-    });
+    if (!title || !category || !location || !description) {
+        alert("Please fill in all fields.");
+        return;
+    }
 
-    if (response.ok) {
-        alert("Issue submitted successfully!");
-        window.location.href = "dashboard.html";
-    } else {
-        alert("Failed to submit issue.");
+    try {
+        const response = await fetch("http://127.0.0.1:8000/issues", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                title: title,
+                category: category,
+                location: location,
+                description: description
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert("Issue submitted successfully!");
+            window.location.href = "dashboard.html";
+        } else {
+            alert(data.detail || "Failed to submit issue.");
+        }
+    } catch (error) {
+        alert("Cannot connect to the server. Make sure your FastAPI backend is running.");
+        console.error(error);
     }
 }
+
     </script>
 
 </body>

@@ -1,12 +1,17 @@
+
 import sqlite3
+import os
+
+DATABASE_NAME = os.path.join(os.path.dirname(os.path.abspath(__file__)), "campusconnect.db")
 
 def get_connection():
-    return sqlite3.connect("campusconnect.db")
+    conn = sqlite3.connect(DATABASE_NAME)
+    conn.row_factory = sqlite3.Row
+    return conn
 
 def create_table():
-    connection = get_connection()
-    cursor = connection.cursor()
-
+    conn = get_connection()
+    cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS issues (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -14,10 +19,15 @@ def create_table():
             category TEXT NOT NULL,
             location TEXT NOT NULL,
             description TEXT NOT NULL,
-            status TEXT NOT NULL DEFAULT 'Open'
+            status TEXT DEFAULT 'Open'
         )
     """)
+    conn.commit()
+    conn.close()
 
-    connection.commit()
-    connection.close()
-    
+def init_db():
+    create_table()
+
+if __name__ == "__main__":
+    init_db()
+    print("Database created successfully")
