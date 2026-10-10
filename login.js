@@ -1,28 +1,28 @@
-const username = document.getElementById("username");
 
-username.addEventListener("invalid", function () {
-    if (username.validity.valueMissing) {
-        username.setCustomValidity("Please enter your username.");
-    }
-    else if (username.validity.patternMismatch) {
-        username.setCustomValidity("Enter your 10-digit roll number.");
-    }
-});
+const email = document.getElementById("email");
 
-username.addEventListener("input", function () {
-    username.setCustomValidity("");
-});
+if (email) {
+    email.addEventListener("invalid", function () {
+        if (email.validity.valueMissing) {
+            email.setCustomValidity("Please enter your college email.");
+        } else if (email.validity.typeMismatch) {
+            email.setCustomValidity("Please enter a valid email address.");
+        }
+    });
 
-
-// _________________________________________________________________________
+    email.addEventListener("input", function () {
+        email.setCustomValidity("");
+    });
+}
 
 const password = document.getElementById("password");
 
-password.addEventListener("input", function () {
-    if (password.value.length < 8) {
-        password.setCustomValidity("Password must contain at least 8 characters.");
-    } else {
-        password.setCustomValidity("");
-    }
-
-});
+if (password) {
+    password.addEventListener("input", function () {
+        if (password.value.length < 8) {
+            password.setCustomValidity("Password must contain at least 8 characters.");
+        } else {
+            password.setCustomValidity("");
+        }
+    });
+}
