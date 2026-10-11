@@ -73,7 +73,7 @@ form.addEventListener("submit", async function (event) {
     try {
         const response = await 
         // fetch("http://127.0.0.1:8000/register",{
-        fetch("https://campusconnect-backend-msnmw.onrender.com/register", 
+        fetch("https://campusconnect-backend-msmw.onrender.com/register", 
               {
                 method: "POST",
                 headers: {
