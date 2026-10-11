@@ -253,6 +253,7 @@ nav a.active{
 .issue-form input,
 .issue-form select,
 .issue-form textarea {
+    box-sizing: border-box;
     width: 100%;
     padding: 11px;
     margin-bottom: 20px;
@@ -260,6 +261,7 @@ nav a.active{
     border-radius: 6px;
     font-size: 14px;
     font-family: Arial, sans-serif;
+    
 }
 
 .issue-form textarea {
