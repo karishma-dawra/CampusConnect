@@ -1,44 +1,69 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Create Issue - CampusConnect</title>
-    <link rel="icon" type="image/png" href="https://drive.google.com/thumbnail?id=1FnXdG7aGmNNLgkQSF7leajJrgMWwGhn8&sz=w128">
+
+    <link rel="icon" type="image/png"
+
+        href="https://drive.google.com/thumbnail?id=1FnXdG7aGmNNLgkQSF7leajJrgMWwGhn8&sz=w128">
+
     <link rel="stylesheet" href="dashboard.css">
+
     <script src="loader.js" defer></script>
+
 </head>
 
 <body>
 
-    <!-- loader start-->
+    <!-- Loader -->
 
+    <div id="loader">
 
-<div id="loader">
+        <div class="spinner" id="spinner"></div>
 
-   
-    <div class="spinner" id="spinner"></div>
-    <img
-        id="loader-logo"
-        src="https://drive.google.com/thumbnail?id=1P5dhvb-RHJ_f-3v45eattSBf56D5e9yZ&sz=w1000"
-        alt="Website Logo">
+        <img
 
-</div>
+            id="loader-logo"
 
-<!-- loader end -->
+            src="https://drive.google.com/thumbnail?id=1P5dhvb-RHJ_f-3v45eattSBf56D5e9yZ&sz=w1000"
+
+            alt="Website Logo">
+
+    </div>
+
+    <!-- Header -->
 
     <header>
+
         <div class="brand">
-            <img src="chitkaralogo.png" alt="Chitkara university logo" class="logo">
+
+            <img src="chitkaralogo.png"
+
+                alt="Chitkara University logo"
+
+                class="logo">
+
             <h1>Campus<span>Connect</span></h1>
+
         </div>
 
         <nav>
+
             <a href="dashboard.html">Dashboard</a>
+
             <a href="profile.html">Profile</a>
-            <a href="login.html" class="logout-btn">Logout</a>
+
+            <a href="#" class="logout-btn" id="logoutBtn">Logout</a>
+
         </nav>
+
     </header>
 
     <main>
@@ -48,84 +73,135 @@
         <div class="issue-form">
 
             <label for="issueTitle">Issue Title</label>
+
             <input
+
                 type="text"
+
                 id="issueTitle"
+
                 name="title"
+
                 placeholder="Enter issue title"
-            >
+
+                required>
 
             <label for="issueCategory">Category</label>
-            <select id="issueCategory" name="category">
+
+            <select id="issueCategory" name="category" required>
+
                 <option value="">Select Category</option>
+
                 <option value="Classroom">Classroom</option>
+
                 <option value="Campus">Campus</option>
+
                 <option value="Lost & Found">Lost & Found</option>
+
                 <option value="General">General</option>
+
             </select>
 
             <label for="issueLocation">Location / Room</label>
+
             <input
+
                 type="text"
+
                 id="issueLocation"
+
                 name="location"
+
                 placeholder="Enter location or room number"
-            >
+
+                required>
 
             <label for="issueDescription">Description</label>
-            <textarea
-                id="issueDescription"
-                name="description"
-                placeholder="Describe the issue"
-            ></textarea>
 
-            <button type="button" onclick="submitIssue()">Submit Issue</button>
+            <textarea
+
+                id="issueDescription"
+
+                name="description"
+
+                placeholder="Describe the issue"
+
+                required></textarea>
+
+            <button type="button" onclick="submitIssue()">
+
+                Submit Issue
+
+            </button>
 
         </div>
 
     </main>
 
     <script>
-        
-async function submitIssue() {
-    const title = document.getElementById("issueTitle").value.trim();
-    const category = document.getElementById("issueCategory").value;
-    const location = document.getElementById("issueLocation").value.trim();
-    const description = document.getElementById("issueDescription").value.trim();
 
-    if (!title || !category || !location || !description) {
-        alert("Please fill in all fields.");
-        return;
-    }
-
-    try {
-        const response = await fetch("https://campusconnect-0p44.onrender.com/issues", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                title: title,
-                category: category,
-                location: location,
-                description: description
-            })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            alert("Issue submitted successfully!");
-            window.location.href = "dashboard.html";
-        } else {
-            alert(data.detail || "Failed to submit issue.");
+        async function submitIssue() {
+            const title =
+                document.getElementById("issueTitle").value.trim();
+            const category =
+                document.getElementById("issueCategory").value;
+            const location =
+                document.getElementById("issueLocation").value.trim();
+            const description =
+                document.getElementById("issueDescription").value.trim();
+            // Get the logged-in user's ID
+            const userId = sessionStorage.getItem("user_id");
+            if (!userId) {
+                alert("Please log in before creating an issue.");
+                window.location.href = "login.html";
+                return;
+            }
+            if (!title || !category || !location || !description) {
+                alert("Please fill in all fields.");
+                return;
+            }
+            try {
+                const response = await fetch(
+                    "http://127.0.0.1:8000/issues",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            title: title,
+                            category: category,
+                            location: location,
+                            description: description,
+                            user_id: Number(userId)
+                        })
+                    }
+                );
+                const data = await response.json();
+                if (response.ok) {
+                    alert("Issue submitted successfully!");
+                    window.location.href = "dashboard.html";
+                } else {
+                    alert(data.detail || "Failed to submit issue.");
+                }
+            } catch (error) {
+                alert(
+                    "Cannot connect to the server. Make sure your FastAPI backend is running."
+                );
+                console.error(error);
+            }
         }
-    } catch (error) {
-        alert("Cannot connect to the server. Make sure your FastAPI backend is running.");
-        console.error(error);
-    }
-}
-
+        // Logout
+        document.getElementById("logoutBtn").addEventListener(
+            "click",
+            function (event) {
+                event.preventDefault();
+                sessionStorage.removeItem("user_id");
+                sessionStorage.removeItem("user_name");
+                sessionStorage.removeItem("user_email");
+                window.location.href = "login.html";
+            }
+        );
     </script>
 
 </body>
