@@ -71,7 +71,7 @@ Developed following the standard GitHub feature-branching workflow (Branch → C
 
 Laksh Maggo— Frontend HTML/CSS Structure, Page Layouts, and Dashboard Design
 
-Hridya Kalra— Frontend JavaScript Integration, Form Handling, and UI Styling
+Hirdya Kalra— Frontend  HTML, CSS, JavaScript Integration
 
 Karishma Dawra — dashboard and profile, Issue Management API Routes, and GitHub Integration
 
