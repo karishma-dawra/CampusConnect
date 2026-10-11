@@ -117,7 +117,7 @@ def register(data: dict):
         if cursor.fetchone():
             raise HTTPException(
                 status_code=409,
-                detail="This username or roll number is already registered."
+                detail="This username or email is already registered."
             )
 
         cursor.execute(
