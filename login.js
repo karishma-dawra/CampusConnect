@@ -1,28 +1,44 @@
+const form = document.getElementById("loginForm");
 
-const email = document.getElementById("email");
+form.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-if (email) {
-    email.addEventListener("invalid", function () {
-        if (email.validity.valueMissing) {
-            email.setCustomValidity("Please enter your college email.");
-        } else if (email.validity.typeMismatch) {
-            email.setCustomValidity("Please enter a valid email address.");
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    if (!email || !password) {
+        alert("Please enter your email and password.");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.detail || "Invalid email or password.");
+            return;
         }
-    });
 
-    email.addEventListener("input", function () {
-        email.setCustomValidity("");
-    });
-}
+        alert("Welcome, " + data.name + "!");
 
-const password = document.getElementById("password");
+        // Save the logged-in user's details for the next page
+        sessionStorage.setItem("user_id", data.user_id);
+        sessionStorage.setItem("user_name", data.name);
+        sessionStorage.setItem("user_email", data.email);
 
-if (password) {
-    password.addEventListener("input", function () {
-        if (password.value.length < 8) {
-            password.setCustomValidity("Password must contain at least 8 characters.");
-        } else {
-            password.setCustomValidity("");
-        }
-    });
-}
+        // Change this if your destination page has another name
+        window.location.href = "./dashboard.html";
+
+    } catch (error) {
+        console.error("Login error:", error);
+        alert("Cannot connect to the server. Make sure FastAPI is running.");
+    }
+});
