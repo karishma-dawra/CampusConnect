@@ -110,7 +110,7 @@
     const status = document.getElementById("issue-status").value;
 
     const response = await fetch(
-        `http://127.0.0.1:8000/issues/${issueId}/status`,
+        `https://campusconnect-backend-msmw.onrender.com/issues/${issueId}/status`,
         {
             method: "PUT",
             headers: {
