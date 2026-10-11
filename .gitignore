@@ -2,14 +2,26 @@
 __pycache__/
 *.py[cod]
 venv/
+.venv/
 backend/venv/
+backend/.venv/
 
 # Local databases
 *.db
+*.sqlite
+*.sqlite3
 
-# Environment variables
+# Environment variables and secrets
 .env
+.env.*
+!.env.example
 
 # macOS
 .DS_Store
+
+# Windows
+Thumbs.db
+
+# Temporary files
 tempCodeRunnerFile.py
+*.log
