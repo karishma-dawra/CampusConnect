@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link rel="icon" type="image/png" href="https://drive.google.com/thumbnail?id=1FnXdG7aGmNNLgkQSF7leajJrgMWwGhn8&sz=w128">
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="loader.js" defer></script>
+</head>
+<body>
+    <!-- loader start-->
+    <div id="loader">
+        <div class="spinner" id="spinner"></div>
+        <img
+            id="loader-logo"
+            src="https://drive.google.com/thumbnail?id=1P5dhvb-RHJ_f-3v45eattSBf56D5e9yZ&sz=w1000"
+            alt="Website Logo">
+        </div>
+    <!-- loader end -->
+    
+    
+    <header>
+        <div class="brand">
+            <img src="chitkaralogo.png"
+                 alt="Chitkara University logo"
+                 class="logo">
+            <h1>Campus<span>Connect</span></h1>
+            <div class="black-bold">ADMIN</div>
+        </div>
+        <nav>
+            <a href="" class="active admin">Admin Console</a>
+            <a href="login.html" class="profile-btn">Student View</a>
+            <a href="login.html" class="logout-btn" id="logoutBtn">Logout</a>
+        </nav>
+        
+    </header>
+
+
+    <div class="card_box">
+            <div class="card1"><div class="card_txt">Registered <br>Students</div><div class="card_num" id="c1">0</div></div>
+            <div class="card1"><div class="card_txt">Total Issues<br><br></div><div class="card_num" id="c2">0</div></div>
+            <div class="card1"><div class="card_txt">Open Issues<br><br></div><div class="card_num" id="c3">0</div></div>
+            <div class="card1"><div class="card_txt">In Progress<br><br></div><div class="card_num" id="c4">0</div></div>
+            <div class="card1"><div class="card_txt">Resolved<br><br></div><div class="card_num" id="c5">0</div></div>
+    </div>
+
+    <div class="tabs-container">
+        <!-- RADIO BUTTONS -->
+        <input type="radio" id="tab1" name="tab-control" checked>
+        <input type="radio" id="tab2" name="tab-control">
+
+        <!-- Tab labels/ headers -->
+         <div class="tab-headers">
+            <label for="tab1" class="tab-label">Campus Issues</label>
+            <label for="tab2" class="tab-label">Registered Users</label>
+        </div>
+        <!-- Tab Contents -->
+        <div class="tab-contents">
+            <div id="content1" class="tab-content">
+                <!-- <div class="sort_container">
+                    <div class="sort">
+                        <button class="admin_sort active" id="all">All</button>
+                        <button class="admin_sort" id="open"  >Open</button>
+                        <button class="admin_sort" id="in_progress">In Progress</button>
+                        <button class="admin_sort" id="resolved">Resolved</button>
+                    </div>
+                </div> -->
+                <table>
+                    <thead>
+                        <td>USERNAME</td>
+                        <td>ISSUE TITLE</td>
+                        <td>CATEGORY</td>
+                        <td>LOCATION</td>
+                        <td>DESCRIPTION</td>
+                    </thead>
+                    <tr>
+                        <td>loading...</td>
+                        <td>loading...</td>
+                        <td>loading...</td>
+                        <td>loading...</td>
+                        <td>loading...</td>
+                    </tr>
+                </table>
+            </div>
+            <div id="content2" class="tab-content">
+                <table>
+                    <thead>
+                        <td>USERNAME</td>
+                        <td>EMAIL</td>
+                    </thead>
+                    <tr>
+                        <td>loading...</td>
+                        <td>loading...</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>    
+</body>
+</html>
